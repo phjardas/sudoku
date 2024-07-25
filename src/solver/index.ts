@@ -1,16 +1,12 @@
 import type { Board } from "../game";
 import { hiddenPairs } from "./hidden-pairs";
 import { hiddenSingles } from "./hidden-singles";
+import { hiddenTriples } from "./hidden-triples";
 import { nakedPairs } from "./naked-pairs";
 import { nakedSingles } from "./naked-singles";
 import { nakedTriples } from "./naked-triples";
 import { removeSeen } from "./remove-seen";
-import {
-  SolverState,
-  SolverStrategy,
-  StrategyPerformedState,
-  StrategyPreviewState,
-} from "./types";
+import { SolverState, SolverStrategy, StrategyPreviewState } from "./types";
 
 export class Solver {
   readonly strategies: ReadonlyArray<SolverStrategy> = [
@@ -20,6 +16,7 @@ export class Solver {
     nakedPairs,
     nakedTriples,
     hiddenPairs,
+    hiddenTriples,
   ];
   state: SolverState = { type: "initial", turn: 0 };
 
@@ -65,7 +62,7 @@ export class Solver {
     strategyIndex,
     actions,
     turn,
-  }: StrategyPreviewState): StrategyPerformedState {
+  }: StrategyPreviewState): SolverState {
     (actions ?? []).map((action) => {
       const cell = this.board.rows[action.row].cells[action.column];
 
@@ -80,6 +77,8 @@ export class Solver {
       }
     });
 
-    return { type: "strategy-performed", strategyIndex, turn: turn + 1 };
+    return this.board.cells.some((c) => !c.value)
+      ? { type: "strategy-performed", strategyIndex, turn: turn + 1 }
+      : { type: "solved", turn: turn + 1 };
   }
 }

@@ -7,7 +7,9 @@ export const nakedPairs: SolverStrategy = {
   label: "Naked Pairs",
   perform: ({ board }) => {
     return {
-      actions: board.boxes.flatMap(findNakedPairs),
+      actions: [...board.boxes, ...board.rows, ...board.columns].flatMap(
+        findNakedPairs
+      ),
     };
   },
 };

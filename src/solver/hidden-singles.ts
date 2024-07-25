@@ -6,7 +6,9 @@ export const hiddenSingles: SolverStrategy = {
   label: "Hidden Singles",
   perform: ({ board }) => {
     return {
-      actions: board.boxes.flatMap(findHiddenSingles),
+      actions: [...board.boxes, ...board.rows, ...board.columns].flatMap(
+        findHiddenSingles
+      ),
     };
   },
 };

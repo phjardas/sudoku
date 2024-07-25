@@ -9,6 +9,15 @@ export class Cell {
   ) {
     this.candidates = value ? [] : possibleValues();
   }
+
+  toString() {
+    return (
+      coordinates(this.row.nr, this.column.nr) +
+      "(" +
+      (this.value ?? this.candidates.join("")) +
+      ")"
+    );
+  }
 }
 
 export class CellBlock {
@@ -25,6 +34,17 @@ export class CellBlock {
 
   getCellsForCandidate(candidate: number): ReadonlyArray<Cell> {
     return this.cells.filter((c) => c.candidates.includes(candidate));
+  }
+
+  toString() {
+    switch (this.type) {
+      case "row":
+        return "Row " + row(this.nr);
+      case "column":
+        return "Column " + (this.nr + 1);
+      case "box":
+        return "Box " + (this.nr + 1);
+    }
   }
 }
 
@@ -70,4 +90,12 @@ export function parseBoard(input: string): Board {
 
 export function possibleValues(): ReadonlyArray<number> {
   return [1, 2, 3, 4, 5, 6, 7, 8, 9];
+}
+
+export function row(nr: number): string {
+  return "ABCDEFGHJ"[nr];
+}
+
+export function coordinates(rowNr: number, column: number): string {
+  return row(rowNr) + (column + 1);
 }

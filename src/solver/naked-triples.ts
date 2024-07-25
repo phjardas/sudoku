@@ -7,7 +7,9 @@ export const nakedTriples: SolverStrategy = {
   label: "Naked Triples",
   perform: ({ board }) => {
     return {
-      actions: board.boxes.flatMap(findNakedTriples),
+      actions: [...board.boxes, ...board.rows, ...board.columns].flatMap(
+        findNakedTriples
+      ),
     };
   },
 };

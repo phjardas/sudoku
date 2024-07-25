@@ -7,7 +7,9 @@ export const hiddenPairs: SolverStrategy = {
   label: "Hidden Pairs",
   perform: ({ board }) => {
     return {
-      actions: board.boxes.flatMap(findHiddenPairs),
+      actions: [...board.boxes, ...board.rows, ...board.columns].flatMap(
+        findHiddenPairs
+      ),
     };
   },
 };
