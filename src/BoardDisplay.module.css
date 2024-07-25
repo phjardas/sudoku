@@ -78,3 +78,7 @@
 .candidateSet {
   background: lightgreen;
 }
+
+.candidateHighlight1 {
+  background: cyan;
+}

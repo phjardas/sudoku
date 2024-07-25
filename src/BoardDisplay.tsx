@@ -1,10 +1,10 @@
 import classes from "./BoardDisplay.module.css";
-import type { Board } from "./game";
+import type { Board, Cell } from "./game";
 import type { SolverAction } from "./solver/types";
 
 export default function BoardDisplay({
   board,
-  actions,
+  actions = [],
 }: {
   board: Board;
   actions?: ReadonlyArray<SolverAction>;
@@ -22,25 +22,7 @@ export default function BoardDisplay({
                 cell.candidates.map((c) => (
                   <span
                     key={c}
-                    className={[
-                      classes[`candidate${c}`],
-                      actions?.some(
-                        (a) =>
-                          a.type === "remove-candidate" &&
-                          a.row === cell.row.nr &&
-                          a.column === cell.column.nr &&
-                          a.value === c
-                      ) && classes.candidateRemoved,
-                      actions?.some(
-                        (a) =>
-                          a.type === "set-value" &&
-                          a.row === cell.row.nr &&
-                          a.column === cell.column.nr &&
-                          a.value === c
-                      ) && classes.candidateSet,
-                    ]
-                      .filter(Boolean)
-                      .join(" ")}
+                    className={getCandidateClasses(cell, c, actions)}
                   >
                     {c}
                   </span>
@@ -51,4 +33,33 @@ export default function BoardDisplay({
       ))}
     </div>
   );
+}
+
+function getCandidateClasses(
+  cell: Cell,
+  candidate: number,
+  actions: ReadonlyArray<SolverAction>
+): string {
+  const matchingActions = actions.filter(
+    (a) =>
+      (a.type === "highlight-candidate" ||
+        a.type === "remove-candidate" ||
+        a.type === "set-value") &&
+      a.row === cell.row.nr &&
+      a.column === cell.column.nr &&
+      a.value === candidate
+  );
+
+  return [
+    `candidate${candidate}`,
+    ...matchingActions.map((action) =>
+      action.type === "highlight-candidate"
+        ? `candidateHighlight${action.color}`
+        : action.type === "remove-candidate"
+          ? "candidateRemoved"
+          : "candidateSet"
+    ),
+  ]
+    .map((c) => classes[c])
+    .join(" ");
 }

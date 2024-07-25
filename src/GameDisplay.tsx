@@ -18,7 +18,11 @@ export default function GameDisplay({ board }: { board: Board }) {
           key={state.turn}
         />
       </div>
-      <p>Code: {board.cells.map((c) => c.value ?? "-").join("")}</p>
+      <p>Code: {board.cells.map((c) => c.value ?? "0").join("")}</p>
+      {solver.state.type === "unsolvable" && (
+        <div>Sorry, I cannot solve this Sudoku with any of my strategies.</div>
+      )}
+      {solver.state.type === "solved" && <div>Solved!</div>}
       <button onClick={() => setState(solver.next())}>next</button>
       <ul>
         {solver.strategies.map((strategy, i) => (

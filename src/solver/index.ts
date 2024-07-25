@@ -1,6 +1,8 @@
 import type { Board } from "../game";
 import { hiddenSingles } from "./hidden-singles";
+import { nakedPairs } from "./naked-pairs";
 import { nakedSingles } from "./naked-singles";
+import { nakedTriples } from "./naked-triples";
 import { removeSeen } from "./remove-seen";
 import {
   SolverState,
@@ -14,6 +16,8 @@ export class Solver {
     removeSeen,
     nakedSingles,
     hiddenSingles,
+    nakedPairs,
+    nakedTriples,
   ];
   state: SolverState = { type: "initial", turn: 0 };
 
@@ -40,16 +44,17 @@ export class Solver {
     }
   }
 
-  private previewStrategy(
-    strategyIndex: number,
-    turn: number
-  ): StrategyPreviewState {
+  private previewStrategy(strategyIndex: number, turn: number): SolverState {
     if (strategyIndex >= this.strategies.length) {
-      throw new Error("Did not find any strategy to continue solving.");
+      return { type: "unsolvable", turn };
     }
 
     const strategy = this.strategies[strategyIndex];
     const result = strategy.perform({ board: this.board });
+
+    if (!result.actions?.length) {
+      return this.previewStrategy(strategyIndex + 1, turn);
+    }
 
     return { type: "strategy-preview", strategyIndex, turn, ...result };
   }

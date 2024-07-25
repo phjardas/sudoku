@@ -64,7 +64,7 @@ export function parseBoard(input: string): Board {
     input
       .split("")
       .map((s) => parseInt(s))
-      .map((s) => (isNaN(s) ? undefined : s))
+      .map((s) => (isNaN(s) || s < 1 || s > 9 ? undefined : s))
   );
 }
 

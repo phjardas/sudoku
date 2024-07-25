@@ -11,6 +11,14 @@ export type RemoveCandidate = {
   value: number;
 };
 
+export type HighlightCandidate = {
+  type: "highlight-candidate";
+  row: number;
+  column: number;
+  value: number;
+  color: number;
+};
+
 export type SetValue = {
   type: "set-value";
   row: number;
@@ -18,7 +26,7 @@ export type SetValue = {
   value: number;
 };
 
-export type SolverAction = RemoveCandidate | SetValue;
+export type SolverAction = RemoveCandidate | HighlightCandidate | SetValue;
 
 export type SolverStrategyResult = {
   actions?: ReadonlyArray<SolverAction>;
@@ -32,6 +40,8 @@ export type SolverStrategy = {
 };
 
 export type InitialSolverState = { type: "initial"; turn: 0 };
+export type SolvedState = { type: "solved"; turn: number };
+export type UnsolvableState = { type: "unsolvable"; turn: number };
 
 export type StrategyPreviewState = {
   type: "strategy-preview";
@@ -50,4 +60,6 @@ export type StrategyPerformedState = {
 export type SolverState =
   | InitialSolverState
   | StrategyPreviewState
-  | StrategyPerformedState;
+  | StrategyPerformedState
+  | SolvedState
+  | UnsolvableState;
