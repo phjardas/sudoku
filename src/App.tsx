@@ -10,9 +10,11 @@ const nakedPair =
   "400000938032094100095300240370609004529001673604703090957008300003900400240030709";
 const nakedTriple =
   "294513006600842319300697254000056000040080060000470000730164005900735001400928637";
+const hiddenPairs =
+  ".........9.46.7....768.41..3.97.1.8.7.8...3.1.513.87.2..75.261...54.32.8.........";
 
 export default function App() {
-  const board = useMemo(() => parseBoard(nakedTriple), []);
+  const board = useMemo(() => parseBoard(hiddenPairs), []);
 
   return <GameDisplay board={board} />;
 }

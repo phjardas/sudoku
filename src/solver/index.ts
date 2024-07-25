@@ -1,4 +1,5 @@
 import type { Board } from "../game";
+import { hiddenPairs } from "./hidden-pairs";
 import { hiddenSingles } from "./hidden-singles";
 import { nakedPairs } from "./naked-pairs";
 import { nakedSingles } from "./naked-singles";
@@ -18,6 +19,7 @@ export class Solver {
     hiddenSingles,
     nakedPairs,
     nakedTriples,
+    hiddenPairs,
   ];
   state: SolverState = { type: "initial", turn: 0 };
 

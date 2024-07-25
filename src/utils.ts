@@ -17,15 +17,15 @@ export function containsAny<T>(
   return haystack.some((h) => needles.includes(h));
 }
 
-export function union(
-  ...lists: ReadonlyArray<ReadonlyArray<number>>
-): ReadonlyArray<number> {
+export function union<T>(
+  ...lists: ReadonlyArray<ReadonlyArray<T>>
+): ReadonlyArray<T> {
   return [...new Set(lists.flatMap((l) => l))].toSorted();
 }
 
-export function intersection(
-  ...lists: ReadonlyArray<ReadonlyArray<number>>
-): ReadonlyArray<number> {
+export function intersection<T>(
+  ...lists: ReadonlyArray<ReadonlyArray<T>>
+): ReadonlyArray<T> {
   if (lists.length === 0) return [];
   return lists.reduce((acc, list) => acc.filter((n) => list.includes(n)));
 }
