@@ -1,5 +1,5 @@
 import { Cell, CellBlock } from "../game";
-import { intersection, union } from "../utils";
+import { union } from "../utils";
 import type { SolverAction, SolverStrategy } from "./types";
 
 export const hiddenTriples: SolverStrategy = {
@@ -15,42 +15,32 @@ export const hiddenTriples: SolverStrategy = {
 };
 
 function findHiddenTriples(box: CellBlock): ReadonlyArray<SolverAction> {
+  const actions: Array<SolverAction> = [];
+
   const cells = Array.from(new Array(9), (_, i) =>
     box.cells.filter((c) => c.candidates.includes(i + 1))
   );
 
-  const actions: Array<SolverAction> = [];
+  for (let i = 0; i < cells.length; i++) {
+    const cellsA = cells[i];
+    if (cellsA.length < 2 || cellsA.length > 3) continue;
 
-  for (let i = 1; i <= 9; i++) {
-    const cellsA = cells[i - 1];
+    for (let j = i + 1; j < cells.length; j++) {
+      const cellsB = cells[j];
+      if (cellsB.length < 2 || cellsB.length > 3) continue;
 
-    if (cellsA.length === 2 || cellsA.length === 3) {
-      for (let j = i + 1; j <= 9; j++) {
-        const cellsB = cells[j - 1];
-
-        if (cellsB.length === 2 || cellsB.length === 3) {
-          for (let k = j + 1; k <= 9; k++) {
-            const cellsC = cells[k - 1];
-
-            if (cellsC.length === 2 || cellsC.length === 3) {
-              const cellUnion = union(cellsA, cellsB, cellsC);
-
-              if (
-                cellUnion.length === 3 &&
-                intersection(cellUnion, cellsA).length >= 2 &&
-                intersection(cellUnion, cellsB).length >= 2 &&
-                intersection(cellUnion, cellsC).length >= 2
-              ) {
-                console.log(
-                  "%s has a hidden triple with %s in %s",
-                  box.toString(),
-                  [i, j, k].join(", "),
-                  cellUnion.join(", ")
-                );
-                actions.push(...createTupleActions(cellUnion, [i, j, k]));
-              }
-            }
-          }
+      for (let k = j + 1; k < cells.length; k++) {
+        const cellsC = cells[k];
+        if (cellsC.length < 2 || cellsC.length > 3) continue;
+        const unionABC = union(cellsA, cellsB, cellsC);
+        if (unionABC.length === 3) {
+          console.log(
+            "%s contains a hidden triple with %s: %s",
+            box.toString(),
+            [i + 1, j + 1, k + 1].join(", "),
+            unionABC.join(", ")
+          );
+          actions.push(...createTupleActions(unionABC, [i + 1, j + 1, k + 1]));
         }
       }
     }
