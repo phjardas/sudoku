@@ -1,3 +1,5 @@
+export const possibleValues = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
+
 export class Cell {
   candidates: ReadonlyArray<number>;
 
@@ -7,7 +9,7 @@ export class Cell {
     public readonly box: CellBlock,
     public value?: number
   ) {
-    this.candidates = value ? [] : possibleValues();
+    this.candidates = value ? [] : possibleValues;
   }
 
   toString() {
@@ -86,10 +88,6 @@ export function parseBoard(input: string): Board {
       .map((s) => parseInt(s))
       .map((s) => (isNaN(s) || s < 1 || s > 9 ? undefined : s))
   );
-}
-
-export function possibleValues(): ReadonlyArray<number> {
-  return [1, 2, 3, 4, 5, 6, 7, 8, 9];
 }
 
 export function row(nr: number): string {

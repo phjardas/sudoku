@@ -16,7 +16,7 @@ export const hiddenSingles: SolverStrategy = {
 function findHiddenSingles(box: CellBlock): ReadonlyArray<SolverAction> {
   const values = box.values;
 
-  return possibleValues()
+  return possibleValues
     .filter((candidate) => !values.includes(candidate))
     .flatMap((candidate) => {
       const cells = box.getCellsForCandidate(candidate);

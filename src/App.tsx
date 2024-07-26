@@ -1,22 +1,51 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { parseBoard } from "./game";
 import GameDisplay from "./GameDisplay";
 
-const nakedPairs =
-  "400000938032094100095300240370609004529001673604703090957008300003900400240030709";
-const nakedTriples =
-  "294513006600842319300697254000056000040080060000470000730164005900735001400928637";
-const hiddenPairs =
-  "000000000904607000076804100309701080708000301051308702007502610005403208000000000";
-const hiddenTriples =
-  "000001030231090000065003100678924300103050006000136700009360570006019843300000000";
-const pointingPairs =
-  "017903600000080000900000507072010430000402070064370250701000065000030000005601720";
-const boxLineReduction =
-  "016007803090800000870001060048000300650009082039000650060900020080002936924600510";
+type Bookmark = { label: string; code: string };
+
+const bookmarks: ReadonlyArray<Bookmark> = [
+  {
+    label: "Gentle",
+    code: "....6..3......95.6.41...2..8..7...25..........5..13..8..3...76.4.28......1..2....",
+  },
+  {
+    label: "Naked Pairs",
+    code: "4.....938.32.941...953..24.37.6.9..4529..16736.47.3.9.957..83....39..4..24..3.7.9",
+  },
+  {
+    label: "Naked Triples",
+    code: "294513..66..8423193..697254....56....4..8..6....47....73.164..59..735..14..928637",
+  },
+  {
+    label: "Hidden Pairs",
+    code: ".........9.46.7....768.41..3.97.1.8.7.8...3.1.513.87.2..75.261...54.32.8.........",
+  },
+  {
+    label: "Hidden Triples",
+    code: ".....1.3.231.9.....65..31..6789243..1.3.5...6...1367....936.57...6.198433........",
+  },
+  {
+    label: "Pointing Pairs",
+    code: ".179.36......8....9.....5.7.72.1.43....4.2.7..6437.25.7.1....65....3......56.172.",
+  },
+  {
+    label: "X-Wing",
+    code: "1.....569492.561.8.561.924...964.8.1.64.1....218.356.4.4.5...169.5.614.2621.....5",
+  },
+  {
+    label: "Rectangle Elimination",
+    code: "....6..3.3....95.6641...2..83.7..1251.........5..13..8.83...7624.28......1..2....",
+  },
+];
 
 export default function App() {
-  const board = useMemo(() => parseBoard(boxLineReduction), []);
+  const [boardCode, setBoardCode] = useState(bookmarks[6].code);
+  const board = useMemo(() => parseBoard(boardCode), []);
 
-  return <GameDisplay board={board} />;
+  return (
+    <div className="p-4">
+      <GameDisplay board={board} />
+    </div>
+  );
 }

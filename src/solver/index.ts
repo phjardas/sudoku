@@ -9,6 +9,7 @@ import { nakedTriples } from "./naked-triples";
 import { pointingPairs } from "./pointing-pairs";
 import { removeSeen } from "./remove-seen";
 import { SolverState, SolverStrategy, StrategyPreviewState } from "./types";
+import { xwing } from "./x-wing";
 
 export class Solver {
   readonly strategies: ReadonlyArray<SolverStrategy> = [
@@ -21,6 +22,7 @@ export class Solver {
     hiddenTriples,
     pointingPairs,
     boxLineReduction,
+    xwing,
   ];
   state: SolverState = { type: "initial", turn: 0 };
 

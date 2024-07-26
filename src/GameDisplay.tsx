@@ -9,7 +9,7 @@ export default function GameDisplay({ board }: { board: Board }) {
   const [state, setState] = useState(solver.state);
 
   return (
-    <div className="p-4">
+    <>
       <div className="flex gap-4 flex-row flex-wrap items-start">
         <BoardDisplay
           board={board}
@@ -55,9 +55,9 @@ export default function GameDisplay({ board }: { board: Board }) {
           </ul>
         </div>
       </div>
-      <p className="mt-4">
-        Code: {board.cells.map((c) => c.value ?? "0").join("")}
-      </p>
-    </div>
+      <pre className="mt-4 text-xs">
+        {board.cells.map((c) => c.value ?? ".").join("")}
+      </pre>
+    </>
   );
 }
