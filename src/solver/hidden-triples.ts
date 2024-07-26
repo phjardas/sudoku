@@ -34,12 +34,6 @@ function findHiddenTriples(box: CellBlock): ReadonlyArray<SolverAction> {
         if (cellsC.length < 2 || cellsC.length > 3) continue;
         const unionABC = union(cellsA, cellsB, cellsC);
         if (unionABC.length === 3) {
-          console.log(
-            "%s contains a hidden triple with %s: %s",
-            box.toString(),
-            [i + 1, j + 1, k + 1].join(", "),
-            unionABC.join(", ")
-          );
           actions.push(...createTupleActions(unionABC, [i + 1, j + 1, k + 1]));
         }
       }

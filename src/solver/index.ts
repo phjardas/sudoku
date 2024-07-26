@@ -1,10 +1,12 @@
 import type { Board } from "../game";
+import { boxLineReduction } from "./box-line-reduction";
 import { hiddenPairs } from "./hidden-pairs";
 import { hiddenSingles } from "./hidden-singles";
 import { hiddenTriples } from "./hidden-triples";
 import { nakedPairs } from "./naked-pairs";
 import { nakedSingles } from "./naked-singles";
 import { nakedTriples } from "./naked-triples";
+import { pointingPairs } from "./pointing-pairs";
 import { removeSeen } from "./remove-seen";
 import { SolverState, SolverStrategy, StrategyPreviewState } from "./types";
 
@@ -17,6 +19,8 @@ export class Solver {
     nakedTriples,
     hiddenPairs,
     hiddenTriples,
+    pointingPairs,
+    boxLineReduction,
   ];
   state: SolverState = { type: "initial", turn: 0 };
 

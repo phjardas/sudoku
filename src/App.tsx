@@ -12,9 +12,11 @@ const hiddenTriples =
   "000001030231090000065003100678924300103050006000136700009360570006019843300000000";
 const pointingPairs =
   "017903600000080000900000507072010430000402070064370250701000065000030000005601720";
+const boxLineReduction =
+  "016007803090800000870001060048000300650009082039000650060900020080002936924600510";
 
 export default function App() {
-  const board = useMemo(() => parseBoard(hiddenTriples), []);
+  const board = useMemo(() => parseBoard(boxLineReduction), []);
 
   return <GameDisplay board={board} />;
 }
