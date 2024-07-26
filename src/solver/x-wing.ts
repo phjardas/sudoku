@@ -1,4 +1,4 @@
-import { Board, possibleValues } from "../game";
+import { type Board, type Cell, type CellBlock, possibleValues } from "../game";
 import { arrayEquals } from "../utils";
 import type { SolverAction, SolverStrategy } from "./types";
 
@@ -12,48 +12,79 @@ export const xwing: SolverStrategy = {
   },
 };
 
+type LineSpec = {
+  getFromBoard: (board: Board) => ReadonlyArray<CellBlock>;
+  get: (cell: Cell) => CellBlock;
+  getOther: (cell: Cell) => CellBlock;
+};
+
+const rowSpec: LineSpec = {
+  getFromBoard: (board) => board.rows,
+  get: (cell) => cell.row,
+  getOther: (cell) => cell.column,
+};
+
+const columnSpec: LineSpec = {
+  getFromBoard: (board) => board.columns,
+  get: (cell) => cell.column,
+  getOther: (cell) => cell.row,
+};
+
 function findXWings(board: Board, value: number): ReadonlyArray<SolverAction> {
+  return [
+    ...findLineXWings(board, rowSpec, value),
+    ...findLineXWings(board, columnSpec, value),
+  ];
+}
+
+function findLineXWings(
+  board: Board,
+  spec: LineSpec,
+  value: number
+): ReadonlyArray<SolverAction> {
   const actions: Array<SolverAction> = [];
 
-  const candidateRows = board.rows.filter(
-    (row) =>
-      row.cells.filter((cell) => cell.candidates.includes(value)).length === 2
-  );
+  const candidateLines = spec
+    .getFromBoard(board)
+    .filter(
+      (line) =>
+        line.cells.filter((cell) => cell.candidates.includes(value)).length ===
+        2
+    );
 
-  for (let i = 0; i < candidateRows.length; i++) {
-    const rowA = candidateRows[i];
-    const rowAcolumns = rowA.cells
+  for (let i = 0; i < candidateLines.length; i++) {
+    const lineA = candidateLines[i];
+    const orthoA = lineA.cells
       .filter((cell) => cell.candidates.includes(value))
-      .map((cell) => cell.column);
+      .map(spec.getOther);
 
-    for (let j = i + 1; j < candidateRows.length; j++) {
-      const rowB = candidateRows[j];
-      const rowBcolumns = rowB.cells
+    for (let j = i + 1; j < candidateLines.length; j++) {
+      const lineB = candidateLines[j];
+      const orthoB = lineB.cells
         .filter((cell) => cell.candidates.includes(value))
-        .map((cell) => cell.column);
+        .map(spec.getOther);
 
-      if (arrayEquals(rowAcolumns, rowBcolumns)) {
-        const removals: ReadonlyArray<SolverAction> = rowAcolumns.flatMap(
-          (column) =>
-            column.cells
-              .filter(
-                (c) =>
-                  c.row !== rowA &&
-                  c.row !== rowB &&
-                  c.candidates.includes(value)
-              )
-              .map((cell) => ({
-                type: "remove-candidate",
-                row: cell.row.nr,
-                column: cell.column.nr,
-                value,
-              }))
+      if (arrayEquals(orthoA, orthoB)) {
+        const removals: ReadonlyArray<SolverAction> = orthoA.flatMap((column) =>
+          column.cells
+            .filter(
+              (c) =>
+                spec.get(c) !== lineA &&
+                spec.get(c) !== lineB &&
+                c.candidates.includes(value)
+            )
+            .map((cell) => ({
+              type: "remove-candidate",
+              row: cell.row.nr,
+              column: cell.column.nr,
+              value,
+            }))
         );
 
         if (removals.length) {
           const highlights: ReadonlyArray<SolverAction> = [
-            ...rowA.cells,
-            ...rowB.cells,
+            ...lineA.cells,
+            ...lineB.cells,
           ]
             .filter((c) => c.candidates.includes(value))
             .map((cell) => ({

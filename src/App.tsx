@@ -34,13 +34,17 @@ const bookmarks: ReadonlyArray<Bookmark> = [
     code: "1.....569492.561.8.561.924...964.8.1.64.1....218.356.4.4.5...169.5.614.2621.....5",
   },
   {
+    label: "X-Wing 2",
+    code: ".......9476.91..5..9...2.81.7..5..1....7.9....8..31.6724.1...7..1..9..459.....1..",
+  },
+  {
     label: "Rectangle Elimination",
     code: "....6..3.3....95.6641...2..83.7..1251.........5..13..8.83...7624.28......1..2....",
   },
 ];
 
 export default function App() {
-  const [boardCode, setBoardCode] = useState(bookmarks[6].code);
+  const [boardCode, setBoardCode] = useState(bookmarks[7].code);
   const board = useMemo(() => parseBoard(boardCode), []);
 
   return (
